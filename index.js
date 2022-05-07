@@ -5,6 +5,7 @@ const express = require('express')
 const cors = require('cors')
 const logger = require('./utils/logger')
 const jwt = require('jsonwebtoken')
+const verifyJwt = require('./middlewares/verifyJwt')
 
 // Models
 const Item = require('./database/schema/Item')
@@ -26,7 +27,7 @@ app.get('/inventory', async (req, res) => {
   })
 })
 
-app.get('/inventory/:id', async (req, res) => {
+app.get('/inventory/:id', verifyJwt, async (req, res) => {
   const { id } =  req.params
   try {
     const item = await Item.findOne({ _id: id})
@@ -36,7 +37,7 @@ app.get('/inventory/:id', async (req, res) => {
   }
 })
 
-app.delete('/inventory/:id', async (req, res) => {
+app.delete('/inventory/:id', verifyJwt, async (req, res) => {
   const { id } =  req.params
   try {
     await Item.deleteOne({ _id: id})
@@ -46,7 +47,7 @@ app.delete('/inventory/:id', async (req, res) => {
   }
 })
 
-app.post('/inventory/:id/delivered', async (req, res) => {
+app.put('/inventory/:id/delivered', verifyJwt, async (req, res) => {
   const { id } =  req.params
 
   try {
@@ -67,7 +68,7 @@ app.post('/inventory/:id/delivered', async (req, res) => {
   }
 })
 
-app.put('/inventory/:id/restock', async (req, res) => {
+app.put('/inventory/:id/restock', verifyJwt, async (req, res) => {
   const { id } =  req.params
   const { quantity } = req.body
 
@@ -88,9 +89,11 @@ app.put('/inventory/:id/restock', async (req, res) => {
   }
 })
 
-app.post('/inventory/add', async (req, res) => {
+app.post('/inventory/add', verifyJwt, async (req, res) => {
+  const user = req.user
   const body = req.body
-  const insertData = await Item.create(body)
+  
+  const insertData = await Item.create({...body, ...user})
   res.json(insertData)
 })
 

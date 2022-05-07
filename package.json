@@ -1,0 +1,20 @@
+{
+  "name": "laptop-carnival-server",
+  "version": "1.0.0",
+  "description": "Backend for laptop carnival website",
+  "main": "index.js",
+  "repository": "https://github.com/ProgrammingHeroWC4/warehouse-management-server-side-shahriyardx",
+  "author": "Md Shahriyar Alam <mdshahriyaralam552@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "mongoose": "^6.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}

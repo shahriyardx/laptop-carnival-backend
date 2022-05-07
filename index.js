@@ -45,6 +45,27 @@ app.delete('/inventory/:id', async (req, res) => {
   }
 })
 
+app.post('/inventory/:id/delivered', async (req, res) => {
+  const { id } =  req.params
+
+  try {
+    const item = await Item.findOne({ _id: id})
+
+    if (item.quantity <= 0) {
+      return res.json({ error : "Item is out of stock, Can't deliver"})
+    }
+
+    await Item.updateOne({ _id: item._id}, {
+      $set: {
+        quantity: item.quantity - 1 
+      }
+    })
+    res.json({...item.toObject(), quantity: item.quantity - 1})
+  } catch (err) {
+    res.json({ error: 'Item not found'})
+  }
+})
+
 app.put('/inventory/:id/restock', async (req, res) => {
   const { id } =  req.params
   const { quantity } = req.body

@@ -1,15 +1,25 @@
 require('dotenv').config()
 require('./database/mongodb.init')
+
 const express = require('express')
 const cors = require('cors')
 
+// Models
+const Item = require('./database/schema/Item')
+
+// Initialize app
 const app = express()
 
+// Use middlewares
 app.use(cors())
 app.use(express.json())
 
 app.get('/inventory', async (req, res) => {
-  res.send('Hello World')
+  const items = await Item.find()
+  
+  res.json({
+    data: items
+  })
 })
 
 const PORT = process.env.PORT || 5000

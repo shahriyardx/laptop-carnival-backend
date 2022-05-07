@@ -18,8 +18,8 @@ app.use(logger)
 
 // Routes
 app.get('/inventory', async (req, res) => {
-  const items = await Item.find()
-  
+  let limit = parseInt(req.query.limit);
+  const items = await Item.find().limit(limit)
   res.json({
     items
   })
@@ -30,6 +30,16 @@ app.get('/inventory/:id', async (req, res) => {
   try {
     const item = await Item.findOne({ _id: id})
     res.json(item)
+  } catch (err) {
+    res.json({ error: 'Item not found'})
+  }
+})
+
+app.delete('/inventory/:id', async (req, res) => {
+  const { id } =  req.params
+  try {
+    await Item.deleteOne({ _id: id})
+    res.json({ success: true })
   } catch (err) {
     res.json({ error: 'Item not found'})
   }

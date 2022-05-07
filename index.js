@@ -3,6 +3,7 @@ require('./database/mongodb.init')
 
 const express = require('express')
 const cors = require('cors')
+const logger = require('./utils/logger')
 
 // Models
 const Item = require('./database/schema/Item')
@@ -13,6 +14,7 @@ const app = express()
 // Use middlewares
 app.use(cors())
 app.use(express.json())
+app.use(logger)
 
 app.get('/inventory', async (req, res) => {
   const items = await Item.find()

@@ -4,6 +4,7 @@ require('./database/mongodb.init')
 const express = require('express')
 const cors = require('cors')
 const logger = require('./utils/logger')
+const jwt = require('jsonwebtoken')
 
 // Models
 const Item = require('./database/schema/Item')
@@ -91,6 +92,18 @@ app.post('/inventory/add', async (req, res) => {
   const body = req.body
   const insertData = await Item.create(body)
   res.json(insertData)
+})
+
+
+app.post('/login', async (req, res) => {
+  const loginData = req.body
+
+  if (!loginData.email || !loginData.username) {
+    return res.json({ error: 'Invalid data' })
+  }
+
+  const token = jwt.sign(loginData, process.env.TOKEN_SECRET)
+  res.json({ accessToken: token })
 })
 
 const PORT = process.env.PORT || 5000

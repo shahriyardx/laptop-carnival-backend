@@ -16,12 +16,29 @@ app.use(cors())
 app.use(express.json())
 app.use(logger)
 
+// Routes
 app.get('/inventory', async (req, res) => {
   const items = await Item.find()
   
   res.json({
-    data: items
+    items
   })
+})
+
+app.get('/inventory/:id', async (req, res) => {
+  const { id } =  req.params
+  try {
+    const item = await Item.findOne({ _id: id})
+    res.json(item)
+  } catch (err) {
+    res.json({ error: 'Item not found'})
+  }
+})
+
+app.post('/inventory/add', async (req, res) => {
+  const body = req.body
+  const insertData = await Item.create(body)
+  res.json(insertData)
 })
 
 const PORT = process.env.PORT || 5000

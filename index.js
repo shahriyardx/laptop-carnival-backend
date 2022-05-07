@@ -49,6 +49,10 @@ app.put('/inventory/:id/restock', async (req, res) => {
   const { id } =  req.params
   const { quantity } = req.body
 
+  if (isNaN(parseInt(quantity))) {
+    return res.json({ error: 'Quantity must be a number'})
+  }
+
   try {
     const item = await Item.findOne({ _id: id})
     await Item.updateOne({ _id: item._id}, {

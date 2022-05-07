@@ -45,6 +45,23 @@ app.delete('/inventory/:id', async (req, res) => {
   }
 })
 
+app.put('/inventory/:id/restock', async (req, res) => {
+  const { id } =  req.params
+  const { quantity } = req.body
+
+  try {
+    const item = await Item.findOne({ _id: id})
+    await Item.updateOne({ _id: item._id}, {
+      $set: {
+        quantity: item.quantity + parseInt(quantity)
+      }
+    })
+    res.json({...item.toObject(), quantity: item.quantity + parseInt(quantity)})
+  } catch (err) {
+    res.json({ error: 'Item not found'})
+  }
+})
+
 app.post('/inventory/add', async (req, res) => {
   const body = req.body
   const insertData = await Item.create(body)

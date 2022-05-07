@@ -27,6 +27,15 @@ app.get('/inventory', async (req, res) => {
   })
 })
 
+app.get('/inventory/my', verifyJwt, async (req, res) => {
+  const { suplier_email } = req.user
+  console.log(suplier_email)
+  const items = await Item.find({ suplier_email })
+  res.json({
+    items
+  })
+})
+
 app.get('/inventory/:id', verifyJwt, async (req, res) => {
   const { id } =  req.params
   try {

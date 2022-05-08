@@ -22,6 +22,10 @@ if(process.env.NODE_ENV !== 'production') {
 }
 
 // Routes
+app.get('/', (req, res) => {
+  res.json({ hello: 'World' })
+})
+
 app.get('/inventory', async (req, res) => {
   let limit = parseInt(req.query.limit);
   const items = await Item.find().limit(limit)

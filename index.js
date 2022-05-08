@@ -68,10 +68,16 @@ app.put('/inventory/:id/delivered', verifyJwt, async (req, res) => {
 
     await Item.updateOne({ _id: item._id}, {
       $set: {
-        quantity: item.quantity - 1 
+        quantity: item.quantity - 1,
+        sold: item.sold + 1,
       }
     })
-    res.json({...item.toObject(), quantity: item.quantity - 1})
+
+    res.json({
+      ...item.toObject(), 
+      quantity: item.quantity - 1,
+      sold: item.sold + 1
+    })
   } catch (err) {
     res.json({ error: 'Item not found'})
   }

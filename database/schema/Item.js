@@ -8,6 +8,7 @@ const ItemSchema = new mongoose.Schema({
   brand: String,
   price: Number,
   quantity: Number,
+  sold: Number,
   suplier: String,
   suplier_email: String
 })

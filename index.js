@@ -43,7 +43,7 @@ app.get('/inventory/my', verifyJwt, async (req, res) => {
   })
 })
 
-app.get('/inventory/:id', verifyJwt, async (req, res) => {
+app.get('/inventory/:id', async (req, res) => {
   const { id } =  req.params
   try {
     const item = await Item.findOne({ _id: id})

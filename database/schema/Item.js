@@ -13,4 +13,9 @@ const ItemSchema = new mongoose.Schema({
   suplier_email: String
 })
 
+ItemSchema.pre("save", function(next) {
+  this.sold = 0
+  next()
+})
+
 module.exports = mongoose.models.Item || mongoose.model("Item", ItemSchema)

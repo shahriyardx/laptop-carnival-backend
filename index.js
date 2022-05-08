@@ -3,7 +3,6 @@ require('./database/mongodb.init')
 
 const express = require('express')
 const cors = require('cors')
-const logger = require('./utils/logger')
 const jwt = require('jsonwebtoken')
 const verifyJwt = require('./middlewares/verifyJwt')
 
@@ -16,7 +15,11 @@ const app = express()
 // Use middlewares
 app.use(cors())
 app.use(express.json())
-app.use(logger)
+
+if(process.env.NODE_ENV !== 'production') {
+  const logger = require('./utils/logger')
+  app.use(logger)
+}
 
 // Routes
 app.get('/inventory', async (req, res) => {
